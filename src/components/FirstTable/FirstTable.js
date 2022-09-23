@@ -1,24 +1,15 @@
-import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
-import styles from "./FirstTable.module.css";
+import React, { useState, useEffect, useCallback } from "react";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
-import Item from "./Item/Item";
 import AddItem from "../AddItem/AddItem";
-import AllItems from "../AllItems/AllItems";
-import ExportItems from "../ExportItems/ExportItems";
-import { read, utils, writeFile } from "xlsx";
+import { read, utils } from "xlsx";
 
 const FirstTable = () => {
   const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    document.title = `You clicked ${items} times`;
-  });
+  const [data, setData] = useState([]);
 
   const handleImport = ($event) => {
     const files = $event.target.files;
-    console.log(files);
     if (files.length) {
       const file = files[0];
       const reader = new FileReader();
@@ -28,26 +19,54 @@ const FirstTable = () => {
 
         if (sheets.length) {
           const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
-          setItems(rows);
+          localStorage.setItem("jsonData", JSON.stringify(rows));
+          window.location.reload();
         }
       };
       reader.readAsArrayBuffer(file);
     }
   };
 
+  const getJsonData = useCallback(async function () {
+    const jsonData = localStorage.getItem("jsonData");
+
+    if (jsonData !== null) {
+      setItems(JSON.parse(jsonData));
+    }
+  }, []);
+
+  const getAddedItem = useCallback(async function () {
+      const d = localStorage.getItem("addItem");
+      const newAddItem = JSON.parse(d);
+
+      if(d) {
+        setData(newAddItem);
+      }
+        
+    },[]);
+
+  useEffect(() => {
+    getJsonData();
+    getAddedItem();
+  }, [getJsonData, getAddedItem]);
+
   return (
     <div>
-      <div className="custom-file">
-        <Form.Label className="custom-file-label" htmlFor="inputGroupFile"/>
-        <Form.Control
-          type="file"
-          name="file"
-          id="inputGroupFile"
-          required
-          onChange={handleImport}
-          accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-        />
-      </div>
+      {localStorage["jsonData"] ? (
+        <></>
+      ) : (
+        <div className="custom-file">
+          <Form.Label className="custom-file-label" htmlFor="inputGroupFile" />
+          <Form.Control
+            type="file"
+            name="file"
+            id="inputGroupFile"
+            required
+            onChange={handleImport}
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+          />
+        </div>
+      )}
       <br></br>
       <AddItem items={items} />
       <br></br>
@@ -63,7 +82,21 @@ const FirstTable = () => {
           </tr>
         </thead>
         <tbody>
-          <Item />
+          {data ? (
+            data.map((d, index) => (
+              <tr key={d.id}>
+                <td>{index + 1}</td>
+                <td>{d.item}</td>
+                <td>{d.measure}</td>
+                <td>{d.amount}</td>
+                <td>{d.priceForOne}</td>
+                <td>{d.total}</td>
+              </tr>
+            )
+          )
+            ) : (
+              <></>
+            )}
         </tbody>
       </Table>
     </div>
