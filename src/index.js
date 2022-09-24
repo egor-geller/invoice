@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import ThemeProvider from "react-bootstrap/ThemeProvider";
 import "bootstrap/dist/css/bootstrap.rtl.min.css";
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
