@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { nanoid } from "nanoid";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import FloatingLabel from "react-bootstrap/esm/FloatingLabel";
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Dropdown from "react-bootstrap/Dropdown";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 
@@ -12,8 +12,9 @@ const AddItem = ({ items }) => {
   const [selectedMeasurement, setSelectedMeasurement] = useState("");
   const [selectedPriceForOne, setPriceForOne] = useState("");
   const [amount, setAmount] = useState(1);
-  const [sum, setSum] = useState(0);
+  const [sum, setSum] = useState();
   const [itm, setItm] = useState("");
+  const [title, setTitle] = useState();
 
   const changeState = (e) => {
     const newAddedItem = {
@@ -25,12 +26,12 @@ const AddItem = ({ items }) => {
       total: sum,
     };
 
-    if (localStorage.getItem("addItem")) {
-      const old = [...JSON.parse(localStorage.getItem("addItem"))];
+    if (sessionStorage.getItem("addItem")) {
+      const old = [...JSON.parse(sessionStorage.getItem("addItem"))];
       old.push(newAddedItem);
-      localStorage.setItem("addItem", JSON.stringify(old));
+      sessionStorage.setItem("addItem", JSON.stringify(old));
     } else {
-      localStorage.setItem("addItem", JSON.stringify([newAddedItem]));
+      sessionStorage.setItem("addItem", JSON.stringify([newAddedItem]));
     }
   };
 
@@ -39,17 +40,16 @@ const AddItem = ({ items }) => {
     setSum(selectedPriceForOne * e.currentTarget.value);
   };
 
-  const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-    <FloatingLabel controlId="sec" label="בחר מוצר">
+  const CustomToggle = React.forwardRef(({ children, onClick}, ref) => (
+    <FloatingLabel controlId="sec" label="בחר">
       <Form.Select
         ref={ref}
         onClick={(e) => {
           e.preventDefault();
           onClick(e);
         }}
-        readOnly
       >
-        {children}
+        <option>{children ? children : "בחר מוצר"}</option>
       </Form.Select>
     </FloatingLabel>
   ));
@@ -85,10 +85,10 @@ const AddItem = ({ items }) => {
 
   return (
     <Form onSubmit={changeState}>
-      <Row className="g-2">
-        <Col md>
-          <Dropdown className="d-grid gap-2" as={ButtonGroup}>
-            <Dropdown.Toggle split as={CustomToggle}></Dropdown.Toggle>
+      <Row className="d-grip g-2">
+        <Col style={{ alignSelf: "center" }}>
+          <Dropdown as={ButtonGroup} className="d-grid gap-2">
+            <Dropdown.Toggle as={CustomToggle}>{title}</Dropdown.Toggle>
             <Dropdown.Menu as={CustomMenu}>
               {items ? (
                 items.map((item, index) => (
@@ -99,6 +99,7 @@ const AddItem = ({ items }) => {
                       setPriceForOne(item.PriceForOne);
                       setSelectedMeasurement(item.Measurement);
                       setSum(item.PriceForOne);
+                      setTitle(item.ItemDescription)
                     }}
                   >
                     {item.ItemDescription}
@@ -109,45 +110,53 @@ const AddItem = ({ items }) => {
               )}
             </Dropdown.Menu>
           </Dropdown>
-          <label className="text-truncate">{itm ? itm : ""}</label>
         </Col>
-        <Col md>
+        <Col md={2}>
           <FloatingLabel controlId="measurement" label="יחידת מידה">
             <Form.Control
               type="text"
-              placeholder=""
+              placeholder="0"
               value={selectedMeasurement}
               readOnly
+              style={{ textAlign: "center" }}
             />
           </FloatingLabel>
         </Col>
-        <Col md>
+        <Col md={2}>
           <FloatingLabel controlId="quantity" label="כמות">
             <Form.Control
               type="text"
-              placeholder=""
+              placeholder="0"
               defaultValue={1}
               onChange={handlePriceChange}
+              style={{ textAlign: "center" }}
             />
           </FloatingLabel>
         </Col>
-        <Col md>
+        <Col md={2}>
           <FloatingLabel controlId="priceForOne" label="מחיר יח׳">
             <Form.Control
               type="text"
-              placeholder=""
+              placeholder="0"
               value={selectedPriceForOne}
               readOnly
+              style={{ textAlign: "center" }}
             />
           </FloatingLabel>
         </Col>
-        <Col md>
+        <Col md={2}>
           <FloatingLabel controlId="priceForAll" label="מחיר מלא">
-            <Form.Control type="text" placeholder="" value={sum} readOnly />
+            <Form.Control
+              type="text"
+              placeholder="0"
+              value={sum}
+              readOnly
+              style={{ textAlign: "center" }}
+            />
           </FloatingLabel>
         </Col>
-        <Col md="auto" style={{ display: "flex" }}>
-          <Button variant="primary" type="submit">
+        <Col className="d-grid g-2" md="auto" style={{ alignSelf: "center" }}>
+          <Button variant="primary" type="submit" size="lg">
             הוסף
           </Button>
         </Col>
