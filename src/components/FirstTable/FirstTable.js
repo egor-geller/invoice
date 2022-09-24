@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import BootstrapTable from "react-bootstrap-table-next";
 import CellEditFactory from "react-bootstrap-table2-editor";
@@ -21,7 +20,7 @@ const FirstTable = () => {
 
         if (sheets.length) {
           const rows = utils.sheet_to_json(wb.Sheets[sheets[0]]);
-          localStorage.setItem("jsonData", JSON.stringify(rows));
+          sessionStorage.setItem("jsonData", JSON.stringify(rows));
           window.location.reload();
         }
       };
@@ -30,7 +29,7 @@ const FirstTable = () => {
   };
 
   const getJsonData = useCallback(async function () {
-    const jsonData = localStorage.getItem("jsonData");
+    const jsonData = sessionStorage.getItem("jsonData");
 
     if (jsonData !== null) {
       setItems(JSON.parse(jsonData));
@@ -38,7 +37,7 @@ const FirstTable = () => {
   }, []);
 
   const getAddedItem = useCallback(async function () {
-    const d = localStorage.getItem("addItem");
+    const d = sessionStorage.getItem("addItem");
     const newAddItem = JSON.parse(d);
 
     if (d) {
@@ -46,23 +45,18 @@ const FirstTable = () => {
     }
   }, []);
 
-  console.log(data);
-
   useEffect(() => {
     getJsonData();
     getAddedItem();
   }, [getJsonData, getAddedItem]);
 
+
   const columns = [
     {
-      //dataField: "id",
+      dataField: "",
       text: "#",
       formatter: (cell, row, rowIndex, extraData) => (
-        <div>
-          <span>ID: {row.id}</span>
-          <br />
-          <span>state: {extraData}</span>
-        </div>
+        <span>{rowIndex + 1}</span>
       )
     },
     {
@@ -93,7 +87,7 @@ const FirstTable = () => {
 
   return (
     <div>
-      {localStorage["jsonData"] ? (
+      {sessionStorage["jsonData"] ? (
         <></>
       ) : (
         <div className="custom-file">
@@ -125,11 +119,11 @@ const FirstTable = () => {
           afterSaveCell: (oldValue, newValue, row, column) => {
             data.map((d, idx) => {
               if (d.id === row.id) {
-                const d = localStorage.getItem("addItem");
+                const d = sessionStorage.getItem("addItem");
                 const newAddItem = JSON.parse(d);
                 newAddItem[idx].amount = newValue;
                 newAddItem[idx].total = newValue * newAddItem[idx].priceForOne;
-                localStorage.setItem("addItem", JSON.stringify(newAddItem));
+                sessionStorage.setItem("addItem", JSON.stringify(newAddItem));
                 window.location.reload();
               }
               return 1;
@@ -138,40 +132,8 @@ const FirstTable = () => {
           autoSelectText: true,
         })}
       />
-      {/* <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>תאור מוצר</th>
-            <th>יחידת מידה</th>
-            <th>כמות</th>
-            <th>מחיר יח׳</th>
-            <th>מחיר מלא</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data ? (
-            data.map((d, index) => (
-              <tr key={d.id}>
-                <td>{index + 1}</td>
-                <td>{d.item}</td>
-                <td>{d.measure}</td>
-                <td>{d.amount}</td>
-                <td>{d.priceForOne}</td>
-                <td>{d.total}</td>
-              </tr>
-            ))
-          ) : (
-            <></>
-          )}
-        </tbody>
-      </Table> */}
     </div>
   );
 };
-
-FirstTable.propTypes = {};
-
-FirstTable.defaultProps = {};
 
 export default FirstTable;
