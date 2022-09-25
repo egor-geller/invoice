@@ -41,7 +41,7 @@ const AddItem = ({ items }) => {
   };
 
   const CustomToggle = React.forwardRef(({ children, onClick}, ref) => (
-    <FloatingLabel controlId="sec" label="בחר">
+    <FloatingLabel controlId="sec" label="בחר מוצר">
       <Form.Select
         ref={ref}
         onClick={(e) => {
@@ -84,7 +84,7 @@ const AddItem = ({ items }) => {
   );
 
   return (
-    <Form onSubmit={changeState}>
+    <Form className="noPrint" onSubmit={changeState}>
       <Row className="d-grip g-2">
         <Col style={{ alignSelf: "center" }}>
           <Dropdown as={ButtonGroup} className="d-grid gap-2">

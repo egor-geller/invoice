@@ -1,0 +1,18 @@
+
+
+.toPrint {
+  display: none;
+}
+
+.header, .headerSpace,
+.footer, .footerSpace {
+  height: 100px;
+}
+.header {
+  position: fixed;
+  top: 0;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+}

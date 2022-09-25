@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+.printToA4 {
+  background-color: #f5f5f5;
+  width: 210mm;
+  min-height: 297mm;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header, .header-space,
+.footer, .footer-space {
+  height: 100px;
+}
+.header {
+  position: fixed;
+  top: 0;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+}
