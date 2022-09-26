@@ -8,7 +8,6 @@ import MainForm from "../MainForm/MainForm";
 import FirstTable from "../FirstTable/FirstTable";
 import Sum from "../Sum/Sum";
 import Button from "react-bootstrap/esm/Button";
-import Table from "react-bootstrap/esm/Table";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 
