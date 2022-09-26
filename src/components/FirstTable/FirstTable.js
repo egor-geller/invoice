@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
+import Button from '@mui/material/Button';
+import Delete from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 import Form from "react-bootstrap/Form";
 import BootstrapTable from "react-bootstrap-table-next";
 import CellEditFactory from "react-bootstrap-table2-editor";
@@ -31,7 +34,7 @@ const FirstTable = () => {
   const getJsonData = useCallback(async function () {
     const jsonData = sessionStorage.getItem("jsonData");
 
-    if (jsonData !== null) {
+    if (jsonData) {
       setItems(JSON.parse(jsonData));
     }
   }, []);
@@ -45,19 +48,27 @@ const FirstTable = () => {
     }
   }, []);
 
+  const handleDelete = (e, index) => {
+    const old = [...JSON.parse(sessionStorage.getItem("addItem"))];
+    old.splice(index, 1);
+    sessionStorage.setItem("addItem", JSON.stringify(old));
+    window.location.reload();
+  }
+
   useEffect(() => {
     getJsonData();
     getAddedItem();
-  }, [getJsonData, getAddedItem]);
 
+  }, [getJsonData, getAddedItem]);
 
   const columns = [
     {
       dataField: "",
       text: "#",
+      isDummyField: true,
       formatter: (cell, row, rowIndex, extraData) => (
         <span>{rowIndex + 1}</span>
-      )
+      ),
     },
     {
       dataField: "item",
@@ -83,6 +94,21 @@ const FirstTable = () => {
       text: "מחיר מלא",
       editable: false,
     },
+    {
+      dataField: "",
+      text: "",
+      editable: false,
+      isDummyField: true,
+      headerClasses: "noPrint",
+      classes: "noPrint",
+      formatter: (cell, row, rowIndex, extraData) => (
+        <span>
+          <IconButton aria-label="delete" key={row} onClick={(e) => handleDelete.apply(null, [e, rowIndex])}>
+          <Delete />
+          </IconButton>
+        </span>
+      ),
+    },
   ];
 
   return (
@@ -102,10 +128,9 @@ const FirstTable = () => {
           />
         </div>
       )}
-      <br></br>
       <AddItem items={items} />
-      <br></br>
       <BootstrapTable
+        bootstrap4
         keyField="id"
         data={data}
         columns={columns}

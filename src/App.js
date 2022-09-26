@@ -6,15 +6,7 @@ import Footer from "./components/Footer/Footer";
 const App = () => {
   return (
     <div className="App printToA4">
-      <div>
-        <BasicView />
-      </div>
-      <div className="header">
-        
-      </div>
-      <div className="footer">
-        <Footer />
-      </div>
+      <BasicView />
     </div>
   );
 };

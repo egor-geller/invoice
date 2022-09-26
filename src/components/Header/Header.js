@@ -3,19 +3,19 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Figure from "react-bootstrap/Figure";
+import Table from "react-bootstrap/esm/Table";
 
 const Header = () => {
   return (
-      <Container style={{ direction: "rtl"}}>
-        <Row style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Col md={8}>
-            {/* style={{ alignSelf: "center" }} */}
+    <Table style={{width: "100%"}}>
+      <thead>
+        <tr>
+          <td style={{border: "none", width: "70%"}}>
             <h1>פלאיי אלקטריק בע״מ</h1>
             <p>ח.פ. 515337251</p>
-          </Col>
-          <Col md={4}>
+          </td>
+          <td style={{border: "none"}}>
             <Figure>
-              {/* style={{ display: "grid", justifyContent: "flex-end" }} */}
               <Figure.Image
                 width={100}
                 height={100}
@@ -23,9 +23,10 @@ const Header = () => {
                 src="images/FlyTagLogo.jpeg"
               />
             </Figure>
-          </Col>
-        </Row>
-      </Container>
+          </td>
+        </tr>
+      </thead>
+    </Table>
   );
 };
 

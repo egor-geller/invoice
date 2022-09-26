@@ -4,9 +4,10 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Dropdown from "react-bootstrap/Dropdown";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import InputGroup from "react-bootstrap/InputGroup";
 
 const AddItem = ({ items }) => {
   const [selectedMeasurement, setSelectedMeasurement] = useState("");
@@ -40,7 +41,7 @@ const AddItem = ({ items }) => {
     setSum(selectedPriceForOne * e.currentTarget.value);
   };
 
-  const CustomToggle = React.forwardRef(({ children, onClick}, ref) => (
+  const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
     <FloatingLabel controlId="sec" label="בחר מוצר">
       <Form.Select
         ref={ref}
@@ -84,7 +85,10 @@ const AddItem = ({ items }) => {
   );
 
   return (
-    <Form className="noPrint" onSubmit={changeState}>
+    <Form
+      className="noPrint"
+      onSubmit={changeState}
+    >
       <Row className="d-grip g-2">
         <Col style={{ alignSelf: "center" }}>
           <Dropdown as={ButtonGroup} className="d-grid gap-2">
@@ -99,7 +103,7 @@ const AddItem = ({ items }) => {
                       setPriceForOne(item.PriceForOne);
                       setSelectedMeasurement(item.Measurement);
                       setSum(item.PriceForOne);
-                      setTitle(item.ItemDescription)
+                      setTitle(item.ItemDescription);
                     }}
                   >
                     {item.ItemDescription}
@@ -114,6 +118,7 @@ const AddItem = ({ items }) => {
         <Col md={2}>
           <FloatingLabel controlId="measurement" label="יחידת מידה">
             <Form.Control
+              required
               type="text"
               placeholder="0"
               value={selectedMeasurement}
@@ -125,6 +130,7 @@ const AddItem = ({ items }) => {
         <Col md={2}>
           <FloatingLabel controlId="quantity" label="כמות">
             <Form.Control
+              required
               type="text"
               placeholder="0"
               defaultValue={1}
@@ -136,6 +142,7 @@ const AddItem = ({ items }) => {
         <Col md={2}>
           <FloatingLabel controlId="priceForOne" label="מחיר יח׳">
             <Form.Control
+              required
               type="text"
               placeholder="0"
               value={selectedPriceForOne}
@@ -145,15 +152,21 @@ const AddItem = ({ items }) => {
           </FloatingLabel>
         </Col>
         <Col md={2}>
-          <FloatingLabel controlId="priceForAll" label="מחיר מלא">
-            <Form.Control
-              type="text"
-              placeholder="0"
-              value={sum}
-              readOnly
-              style={{ textAlign: "center" }}
-            />
-          </FloatingLabel>
+          <InputGroup hasValidation>
+            <FloatingLabel controlId="priceForAll" label="מחיר מלא">
+              <Form.Control
+                required
+                type="text"
+                placeholder="0"
+                value={sum ? sum : ""}
+                readOnly
+                style={{ textAlign: "center" }}
+              />
+              <Form.Control.Feedback type="invalid">
+                Please choose something
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </InputGroup>
         </Col>
         <Col className="d-grid g-2" md="auto" style={{ alignSelf: "center" }}>
           <Button variant="primary" type="submit" size="lg">
