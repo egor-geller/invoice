@@ -5,8 +5,8 @@ WORKDIR /app
 COPY package.json .
 
 RUN npm install
-RUN npm install react-bootstrap-table-next --legacy-peer-deps
-RUN npm install react-bootstrap-table2-editor --legacy-peer-deps
+RUN npm install react-bootstrap-table-next --save --legacy-peer-deps
+RUN npm install react-bootstrap-table2-editor --save --legacy-peer-deps
 
 
 COPY . .
