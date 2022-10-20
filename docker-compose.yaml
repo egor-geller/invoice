@@ -1,7 +1,10 @@
-version: "1.0"
+version: "3.8"
 services:
   invoice:
-    build: ./invoice
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
     container_name: invoice_c
     ports:
       - '3000:3000'
