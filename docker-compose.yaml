@@ -1,9 +1,7 @@
 version: "3.8"
 services:
   invoice:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: ./invoice
     container_name: invoice_c
     ports:
       - '3000:3000'
