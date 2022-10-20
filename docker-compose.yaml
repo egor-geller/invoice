@@ -4,7 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: dev
     container_name: invoice_c
     ports:
       - '3000:3000'
